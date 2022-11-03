@@ -44,5 +44,46 @@ module.exports = {
         bestPaidProfession,
       });
     });
+
+    router.get('/admin/best-clients', async (req, res) => {
+      const { Contract, Job, Profile } = req.app.get('models');
+      const start = req.query.start;
+      const end = req.query.end;
+      const limit = +req.query.limit || 2;
+
+      const jobs = await Job.findAll({
+        where: {
+          paymentDate: {
+            [Op.lte]: new Date(end),
+            [Op.gte]: new Date(start),
+          },
+        },
+        include: {
+          model: Contract,
+          include: 'Client',
+        },
+      });
+
+      const clientsPayments = jobs.reduce((acc, current) => {
+        const clientId = current.Contract.ClientId;
+        if (acc[clientId]) {
+          acc[clientId].paid += current.price;
+        } else {
+          acc[clientId] = {
+            id: clientId,
+            fullName: current.Contract.Client.firstName + current.Contract.Client.lastName,
+            paid: current.price,
+          };
+        }
+        return acc;
+      }, {});
+
+      const sortedPayments = Object.values(clientsPayments).sort((a, b) => b.paid - a.paid);
+
+      // todo thing to consider is how we want to treat the situation where we have more than one client with the same value paid and we need to limit result
+      // currently we just return exactly the number of items in the limit param; we could return all entries with the same value if some of them are inside the limit and the rest is over the limit
+
+      res.json(sortedPayments.slice(0, limit));
+    });
   },
 };
