@@ -1,6 +1,7 @@
 const { Op } = require('sequelize');
 module.exports = {
   setUp(router) {
+    // todo for admin endpoitns we should use some kind of isAdminMiddleware in addition to getProfile to check if user can access admin endpoints
     router.get('/admin/best-profession', async (req, res) => {
       const { Contract, Job } = req.app.get('models');
       const start = req.query.start;
@@ -46,7 +47,7 @@ module.exports = {
     });
 
     router.get('/admin/best-clients', async (req, res) => {
-      const { Contract, Job, Profile } = req.app.get('models');
+      const { Contract, Job } = req.app.get('models');
       const start = req.query.start;
       const end = req.query.end;
       const limit = +req.query.limit || 2;

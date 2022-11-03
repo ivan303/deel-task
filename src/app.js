@@ -6,6 +6,7 @@ const app = express();
 const { setUp: setUpContractsRoutes } = require('./contracts/routes');
 const { setUp: setUpJobsRoutes } = require('./jobs/routes');
 const { setUp: setUpAdminRoutes } = require('./admin/routes');
+const { setUp: setUpBalancesRoutes } = require('./balances/routes');
 
 app.use(bodyParser.json());
 app.set('sequelize', sequelize);
@@ -16,6 +17,7 @@ const router = express.Router();
 setUpContractsRoutes(router);
 setUpJobsRoutes(router);
 setUpAdminRoutes(router);
+setUpBalancesRoutes(router);
 
 app.use('/', router);
 
