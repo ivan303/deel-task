@@ -88,10 +88,10 @@ module.exports = {
           return res.status(404).end();
         }
         if (err.message === INSUFFICIENT_FUNDS_ERROR) {
-          return res.status(400).send({ message: 'Insufficient funds' });
+          return res.status(400).json({ message: 'Insufficient funds' });
         }
         if (err.message === JOB_ALREADY_PAID_ERROR) {
-          return res.status(400).send({ message: 'Job already paid' });
+          return res.status(400).json({ message: 'Job already paid' });
         }
         return res.status(500).end();
       }

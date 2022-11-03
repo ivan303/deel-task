@@ -5,6 +5,7 @@ const { getProfile } = require('./middleware/getProfile');
 const app = express();
 const { setUp: setUpContractsRoutes } = require('./contracts/routes');
 const { setUp: setUpJobsRoutes } = require('./jobs/routes');
+const { setUp: setUpAdminRoutes } = require('./admin/routes');
 
 app.use(bodyParser.json());
 app.set('sequelize', sequelize);
@@ -14,6 +15,7 @@ app.use(getProfile);
 const router = express.Router();
 setUpContractsRoutes(router);
 setUpJobsRoutes(router);
+setUpAdminRoutes(router);
 
 app.use('/', router);
 
